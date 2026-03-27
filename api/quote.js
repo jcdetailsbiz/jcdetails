@@ -142,8 +142,7 @@ async function createRequest(token, clientId, service, firstName, lastName, phon
   `, {
     input: {
       clientId,
-      title:   service,
-      message: `Service: ${service}\nName: ${firstName} ${lastName}\nPhone: ${phone}`,
+      title: service,
     },
   });
 
