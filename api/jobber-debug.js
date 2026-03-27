@@ -1,9 +1,14 @@
-// Temporary debug endpoint — visit /api/jobber-debug to test the Jobber connection.
-// Remove this file once everything is working.
 module.exports = async function handler(req, res) {
   const results = {};
 
-  // Step 1: Get access token
+  // Check env vars are set (don't show values)
+  results.envVars = {
+    JOBBER_CLIENT_ID:     process.env.JOBBER_CLIENT_ID     ? 'SET' : 'MISSING',
+    JOBBER_CLIENT_SECRET: process.env.JOBBER_CLIENT_SECRET ? 'SET' : 'MISSING',
+    JOBBER_REFRESH_TOKEN: process.env.JOBBER_REFRESH_TOKEN ? 'SET' : 'MISSING',
+  };
+
+  // Step 1: Get access token — show raw response
   try {
     const tokenResp = await fetch('https://api.getjobber.com/api/oauth/token', {
       method: 'POST',
@@ -15,10 +20,16 @@ module.exports = async function handler(req, res) {
         refresh_token: process.env.JOBBER_REFRESH_TOKEN,
       }),
     });
-    const tokenData = await tokenResp.json();
-    results.token = tokenData.access_token ? 'OK — got access token' : tokenData;
 
-    if (tokenData.access_token) {
+    const raw = await tokenResp.text();
+    results.tokenRawResponse = raw;
+    results.tokenStatus = tokenResp.status;
+
+    let tokenData;
+    try { tokenData = JSON.parse(raw); } catch (_) { tokenData = null; }
+
+    if (tokenData?.access_token) {
+      results.tokenResult = 'OK';
       const token = tokenData.access_token;
 
       // Step 2: Test clientCreate
@@ -49,7 +60,6 @@ module.exports = async function handler(req, res) {
       });
       results.clientCreate = await clientResp.json();
 
-      // Step 3: If client was created, test requestCreate
       const clientId = results.clientCreate?.data?.clientCreate?.client?.id;
       if (clientId) {
         const reqResp = await fetch('https://api.getjobber.com/api/graphql', {
