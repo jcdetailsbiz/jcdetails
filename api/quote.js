@@ -13,11 +13,16 @@ module.exports = async function handler(req, res) {
   const phone     = (body['Phone']      || '').trim();
   const service   = (body['Service']    || '').trim();
 
+  console.log('Form data received:', { firstName, lastName, phone, service, bodyKeys: Object.keys(body) });
+
   // Submit to Jobber (non-blocking — customer still reaches thanks page on failure)
   try {
     const token    = await getAccessToken();
+    console.log('Got access token OK');
     const clientId = await createClient(token, firstName, lastName, phone);
-    await createRequest(token, clientId, service, firstName, lastName, phone);
+    console.log('Client created:', clientId);
+    const reqResult = await createRequest(token, clientId, service, firstName, lastName, phone);
+    console.log('Request created:', reqResult);
   } catch (err) {
     console.error('Jobber submission error:', err.message);
   }
@@ -144,4 +149,5 @@ async function createRequest(token, clientId, service, firstName, lastName, phon
 
   const errors = result?.data?.requestCreate?.userErrors;
   if (errors?.length) throw new Error(JSON.stringify(errors));
+  return result?.data?.requestCreate?.request?.id || JSON.stringify(result);
 }
