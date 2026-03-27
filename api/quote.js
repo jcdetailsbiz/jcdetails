@@ -95,7 +95,7 @@ async function gql(token, query, variables) {
     headers: {
       Authorization:              `Bearer ${token}`,
       'Content-Type':             'application/json',
-      'X-JOBBER-GRAPHQL-VERSION': '2024-05-15',
+      'X-JOBBER-GRAPHQL-VERSION': '2026-03-10',
     },
     body: JSON.stringify({ query, variables }),
   });
