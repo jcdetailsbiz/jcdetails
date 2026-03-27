@@ -7,18 +7,7 @@ module.exports = async function handler(req, res) {
     return res.redirect(303, '/quote/');
   }
 
-  // Parse body — handles both auto-parsed objects and raw URL-encoded strings
-  let body = req.body;
-  if (typeof body === 'string') {
-    body = Object.fromEntries(new URLSearchParams(body));
-  } else if (!body) {
-    body = await new Promise((resolve) => {
-      let raw = '';
-      req.on('data', chunk => { raw += chunk; });
-      req.on('end', () => resolve(Object.fromEntries(new URLSearchParams(raw))));
-    });
-  }
-
+  const body = req.body || {};
   const firstName = (body['First Name'] || '').trim();
   const lastName  = (body['Last Name']  || '').trim();
   const phone     = (body['Phone']      || '').trim();
