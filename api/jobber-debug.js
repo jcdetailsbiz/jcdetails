@@ -10,6 +10,9 @@ module.exports = async function handler(req, res) {
 
   // Step 1: Get access token — show raw response
   try {
+    const storedToken = await kvGet('jobber_refresh_token') || process.env.JOBBER_REFRESH_TOKEN;
+    results.tokenSource = (await kvGet('jobber_refresh_token')) ? 'KV' : 'env var';
+
     const tokenResp = await fetch('https://api.getjobber.com/api/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -17,7 +20,7 @@ module.exports = async function handler(req, res) {
         grant_type:    'refresh_token',
         client_id:     process.env.JOBBER_CLIENT_ID,
         client_secret: process.env.JOBBER_CLIENT_SECRET,
-        refresh_token: process.env.JOBBER_REFRESH_TOKEN,
+        refresh_token: storedToken,
       }),
     });
 
@@ -30,6 +33,7 @@ module.exports = async function handler(req, res) {
 
     if (tokenData?.access_token) {
       results.tokenResult = 'OK';
+      if (tokenData.refresh_token) await kvSet('jobber_refresh_token', tokenData.refresh_token);
       const token = tokenData.access_token;
 
       // Step 2: Test clientCreate
@@ -96,3 +100,22 @@ module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(results, null, 2));
 };
+
+async function kvGet(key) {
+  try {
+    const resp = await fetch(`${process.env.KV_REST_API_URL}/get/${key}`, {
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
+    });
+    const data = await resp.json();
+    return data.result || null;
+  } catch (_) { return null; }
+}
+
+async function kvSet(key, value) {
+  try {
+    await fetch(`${process.env.KV_REST_API_URL}/set/${key}/${encodeURIComponent(value)}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
+    });
+  } catch (_) {}
+}

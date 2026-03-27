@@ -57,6 +57,9 @@ module.exports = async function handler(req, res) {
 // ── Jobber helpers ────────────────────────────────────────────────────────────
 
 async function getAccessToken() {
+  // Read refresh token from KV (auto-updates on each use), fall back to env var
+  const refreshToken = await kvGet('jobber_refresh_token') || process.env.JOBBER_REFRESH_TOKEN;
+
   const resp = await fetch('https://api.getjobber.com/api/oauth/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -64,12 +67,37 @@ async function getAccessToken() {
       grant_type:    'refresh_token',
       client_id:     process.env.JOBBER_CLIENT_ID,
       client_secret: process.env.JOBBER_CLIENT_SECRET,
-      refresh_token: process.env.JOBBER_REFRESH_TOKEN,
+      refresh_token: refreshToken,
     }),
   });
   const data = await resp.json();
   if (!data.access_token) throw new Error(JSON.stringify(data));
+
+  // Store the new rotated refresh token so the next call works
+  if (data.refresh_token) await kvSet('jobber_refresh_token', data.refresh_token);
+
   return data.access_token;
+}
+
+// ── Vercel KV helpers (REST API, no package needed) ───────────────────────────
+
+async function kvGet(key) {
+  try {
+    const resp = await fetch(`${process.env.KV_REST_API_URL}/get/${key}`, {
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
+    });
+    const data = await resp.json();
+    return data.result || null;
+  } catch (_) { return null; }
+}
+
+async function kvSet(key, value) {
+  try {
+    await fetch(`${process.env.KV_REST_API_URL}/set/${key}/${encodeURIComponent(value)}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
+    });
+  } catch (_) {}
 }
 
 async function gql(token, query, variables) {
