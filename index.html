@@ -372,45 +372,70 @@ document.addEventListener('click', function(e) {
 // Hero slideshow
 (function() {
   var slides = document.querySelectorAll('.hero-slide');
+  var container = document.querySelector('.hero-slideshow');
   if (slides.length < 2) return;
-  var current = 0;
+  var current = 0, touchStartX = 0;
   function preload(idx) {
     var next = slides[(idx + 1) % slides.length];
     var url = next.style.backgroundImage.replace(/url\(['"]?|['"]?\)/g, '');
     if (url) { var img = new Image(); img.src = url; }
   }
-  preload(0);
-  setInterval(function() {
+  function goTo(idx) {
     slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
+    current = (idx + slides.length) % slides.length;
     slides[current].classList.add('active');
     preload(current);
-  }, 5500);
+  }
+  preload(0);
+  var heroTimer = setInterval(function() { goTo(current + 1); }, 5500);
+  if (container) {
+    container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+    container.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) {
+        clearInterval(heroTimer);
+        goTo(dx < 0 ? current + 1 : current - 1);
+        heroTimer = setInterval(function() { goTo(current + 1); }, 5500);
+      }
+    }, {passive:true});
+  }
 })();
 
 // Work slideshow
 (function() {
   var slides = document.querySelectorAll('.work-slide');
   var dotsEl = document.getElementById('workDots');
+  var container = document.querySelector('.work-slideshow');
   if (!slides.length || !dotsEl) return;
-  var current = 0;
+  var current = 0, touchStartX = 0;
   var dots = [];
   slides.forEach(function(_, i) {
     var d = document.createElement('button');
     d.className = 'work-slide-dot' + (i === 0 ? ' active' : '');
     d.setAttribute('aria-label', 'Slide ' + (i + 1));
-    d.addEventListener('click', function() { goTo(i); });
+    d.addEventListener('click', function() { clearInterval(workTimer); goTo(i); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
     dotsEl.appendChild(d);
     dots.push(d);
   });
   function goTo(idx) {
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
-    current = idx;
+    current = (idx + slides.length) % slides.length;
     slides[current].classList.add('active');
     dots[current].classList.add('active');
   }
-  setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
+  var workTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
+  if (container) {
+    container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+    container.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) {
+        clearInterval(workTimer);
+        goTo(dx < 0 ? current + 1 : current - 1);
+        workTimer = setInterval(function() { goTo((current+1)%slides.length); }, 5500);
+      }
+    }, {passive:true});
+  }
 })();
 
 // ── Google Maps + Reviews ──────────────────────────────────────────────────
@@ -549,6 +574,12 @@ window.initMapsAndReviews = function() {
       dot.addEventListener('click', function(){ clearInterval(timer); goTo(i); timer = setInterval(function(){ goTo(cur+1); }, 6000); });
     });
     var timer = setInterval(function(){ goTo(cur+1); }, 6000);
+    var reviewTouchX = 0;
+    card.addEventListener('touchstart', function(e){ reviewTouchX = e.changedTouches[0].clientX; }, {passive:true});
+    card.addEventListener('touchend', function(e){
+      var dx = e.changedTouches[0].clientX - reviewTouchX;
+      if (Math.abs(dx) > 50) { clearInterval(timer); goTo(dx < 0 ? cur+1 : cur-1); timer = setInterval(function(){ goTo(cur+1); }, 6000); }
+    }, {passive:true});
   }
 
   function showFallback() {
