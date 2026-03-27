@@ -1,7 +1,5 @@
 // Handles quote form submissions:
-// 1. Creates client + request in Jobber
-// 2. Sends email to jcdetailsbiz@gmail.com + text to Verizon gateway
-// 3. Redirects customer to /quote/thanks/
+// Creates client + request in Jobber, then redirects to /quote/thanks/
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.redirect(303, '/quote/');
@@ -13,36 +11,12 @@ module.exports = async function handler(req, res) {
   const phone     = (body['Phone']      || '').trim();
   const service   = (body['Service']    || '').trim();
 
-  console.log('Form data received:', { firstName, lastName, phone, service, bodyKeys: Object.keys(body) });
-
-  // Submit to Jobber (non-blocking — customer still reaches thanks page on failure)
   try {
     const token    = await getAccessToken();
-    console.log('Got access token OK');
     const clientId = await createClient(token, firstName, lastName, phone);
-    console.log('Client created:', clientId);
-    const reqResult = await createRequest(token, clientId, service, firstName, lastName, phone);
-    console.log('Request created:', reqResult);
+    await createRequest(token, clientId, service, firstName, lastName, phone);
   } catch (err) {
     console.error('Jobber submission error:', err.message);
-  }
-
-  // Email + SMS notification
-  try {
-    await fetch('https://formsubmit.co/ajax/jcdetailsbiz@gmail.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        'First Name': firstName,
-        'Last Name':  lastName,
-        'Phone':      phone,
-        'Service':    service,
-        '_subject':   'New Quote Request — JC Details LLC',
-        '_cc':        '5082697667@vtext.com',
-      }),
-    });
-  } catch (err) {
-    console.error('Email/SMS notification error:', err.message);
   }
 
   res.redirect(303, '/quote/thanks/');
