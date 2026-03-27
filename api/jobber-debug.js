@@ -38,7 +38,7 @@ module.exports = async function handler(req, res) {
         headers: {
           Authorization:  `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'X-JOBBER-GRAPHQL-VERSION': '2023-11-15',
+          'X-JOBBER-GRAPHQL-VERSION': '2026-03-10',
         },
         body: JSON.stringify({
           query: `
@@ -67,7 +67,7 @@ module.exports = async function handler(req, res) {
           headers: {
             Authorization:  `Bearer ${token}`,
             'Content-Type': 'application/json',
-            'X-JOBBER-GRAPHQL-VERSION': '2023-11-15',
+            'X-JOBBER-GRAPHQL-VERSION': '2026-03-10',
           },
           body: JSON.stringify({
             query: `
