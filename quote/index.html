@@ -143,13 +143,7 @@
       <h1>Get a Free Quote</h1>
       <p class="quote-sub">We'll reach out within 24 hours to confirm your appointment.</p>
 
-      <form action="https://formsubmit.co/jcdetailsbiz@gmail.com" method="POST">
-        <!-- formsubmit config -->
-        <input type="hidden" name="_subject" value="New Quote Request — JC Details LLC" />
-        <input type="hidden" name="_next" value="https://jcdetails.com/quote/thanks/" />
-        <input type="hidden" name="_cc" value="5082697667@vtext.com" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_template" value="table" />
+      <form action="/api/quote" method="POST">
 
         <div class="form-row">
           <div class="form-group">
