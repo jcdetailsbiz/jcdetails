@@ -7,10 +7,22 @@ module.exports = async function handler(req, res) {
     return res.redirect(303, '/quote/');
   }
 
-  const firstName = (req.body['First Name'] || '').trim();
-  const lastName  = (req.body['Last Name']  || '').trim();
-  const phone     = (req.body['Phone']      || '').trim();
-  const service   = (req.body['Service']    || '').trim();
+  // Parse body — handles both auto-parsed objects and raw URL-encoded strings
+  let body = req.body;
+  if (typeof body === 'string') {
+    body = Object.fromEntries(new URLSearchParams(body));
+  } else if (!body) {
+    body = await new Promise((resolve) => {
+      let raw = '';
+      req.on('data', chunk => { raw += chunk; });
+      req.on('end', () => resolve(Object.fromEntries(new URLSearchParams(raw))));
+    });
+  }
+
+  const firstName = (body['First Name'] || '').trim();
+  const lastName  = (body['Last Name']  || '').trim();
+  const phone     = (body['Phone']      || '').trim();
+  const service   = (body['Service']    || '').trim();
 
   // Submit to Jobber (non-blocking — customer still reaches thanks page on failure)
   try {
