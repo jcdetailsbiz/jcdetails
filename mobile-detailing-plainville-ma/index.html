@@ -197,6 +197,24 @@
   </div>
 </section>
 
+<!-- OUR WORK -->
+<section class="section">
+  <div class="container">
+    <p class="section__label">Our Work</p>
+    <h2 class="section__title">Real Results on Real Vehicles</h2>
+    <p class="section__sub">Professional mobile detailing delivered to your driveway — inside and out.</p>
+    <div class="work-slideshow" id="mdWorkSlideshow">
+      <div class="work-slide active" style="background-image:url('/images/detail-work-1618.jpg');"></div>
+      <div class="work-slide" style="background-image:url('/images/detail-work-1916.jpg');"></div>
+      <div class="work-slide" style="background-image:url('/images/detail-work-2529.jpg');"></div>
+      <div class="work-slide" style="background-image:url('/images/detail-work-2749.jpg');"></div>
+      <button class="slide-arrow slide-arrow--prev" id="mdPrev" aria-label="Previous slide">&#8249;</button>
+      <button class="slide-arrow slide-arrow--next" id="mdNext" aria-label="Next slide">&#8250;</button>
+      <div class="work-slide-dots" id="mdWorkDots"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ADD-ONS -->
 <section class="section">
   <div class="container">
@@ -305,6 +323,47 @@
 </footer>
 
 <script>
+// Our Work slideshow
+(function() {
+  var slides = document.querySelectorAll('#mdWorkSlideshow .work-slide');
+  var dotsEl = document.getElementById('mdWorkDots');
+  var container = document.getElementById('mdWorkSlideshow');
+  if (!slides.length || !dotsEl) return;
+  var current = 0, touchStartX = 0;
+  var dots = [];
+  slides.forEach(function(_, i) {
+    var d = document.createElement('button');
+    d.className = 'work-slide-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Slide ' + (i + 1));
+    d.addEventListener('click', function() { clearInterval(mdTimer); goTo(i); mdTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+    dotsEl.appendChild(d);
+    dots.push(d);
+  });
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+  var mdTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
+  if (container) {
+    container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+    container.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) {
+        clearInterval(mdTimer);
+        goTo(dx < 0 ? current + 1 : current - 1);
+        mdTimer = setInterval(function() { goTo((current+1)%slides.length); }, 5500);
+      }
+    }, {passive:true});
+  }
+  var mdPrev = document.getElementById('mdPrev');
+  var mdNext = document.getElementById('mdNext');
+  if (mdPrev) mdPrev.addEventListener('click', function() { clearInterval(mdTimer); goTo(current - 1); mdTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+  if (mdNext) mdNext.addEventListener('click', function() { clearInterval(mdTimer); goTo(current + 1); mdTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+})();
+
 function toggleMobileDropdown(btn) {
   btn.parentElement.classList.toggle('open');
 }
