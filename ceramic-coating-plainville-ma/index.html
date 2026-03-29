@@ -290,21 +290,18 @@
   </div>
 </section>
 
-<!-- GALLERY -->
-<section class="cc-gallery-section">
+<!-- OUR WORK -->
+<section class="section">
   <div class="container">
     <p class="section__label">Our Work</p>
     <h2 class="section__title">Results That Speak for Themselves</h2>
     <p class="section__sub">Every vehicle we coat leaves with a finish that protects and turns heads.</p>
-  </div>
-  <div class="cc-gallery">
-    <div class="cc-gallery__main">
-      <img src="/images/cc-detail-1.jpg" alt="Ceramic coated black SUV showing deep gloss finish — JC Details LLC" loading="lazy" decoding="async" />
-      <div class="cc-gallery__badge">Feynlab Certified Finish</div>
-    </div>
-    <div class="cc-gallery__secondary">
-      <img src="/images/cc-detail-2.jpg" alt="White BMW X7 after ceramic coating service in Plainville MA — JC Details LLC" loading="lazy" decoding="async" />
-      <div class="cc-gallery__tag">BMW X7 &middot; Ceramic Coated</div>
+    <div class="work-slideshow" id="ccWorkSlideshow">
+      <div class="work-slide active" style="background-image:url('/images/series.jpeg');"></div>
+      <div class="work-slide" style="background-image:url('/images/work-5.jpg');"></div>
+      <button class="slide-arrow slide-arrow--prev" id="ccPrev" aria-label="Previous slide">&#8249;</button>
+      <button class="slide-arrow slide-arrow--next" id="ccNext" aria-label="Next slide">&#8250;</button>
+      <div class="work-slide-dots" id="ccWorkDots"></div>
     </div>
   </div>
 </section>
@@ -472,6 +469,47 @@
 </footer>
 
 <script>
+// Our Work slideshow
+(function() {
+  var slides = document.querySelectorAll('#ccWorkSlideshow .work-slide');
+  var dotsEl = document.getElementById('ccWorkDots');
+  var container = document.getElementById('ccWorkSlideshow');
+  if (!slides.length || !dotsEl) return;
+  var current = 0, touchStartX = 0;
+  var dots = [];
+  slides.forEach(function(_, i) {
+    var d = document.createElement('button');
+    d.className = 'work-slide-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Slide ' + (i + 1));
+    d.addEventListener('click', function() { clearInterval(ccTimer); goTo(i); ccTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+    dotsEl.appendChild(d);
+    dots.push(d);
+  });
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+  var ccTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
+  if (container) {
+    container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+    container.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) {
+        clearInterval(ccTimer);
+        goTo(dx < 0 ? current + 1 : current - 1);
+        ccTimer = setInterval(function() { goTo((current+1)%slides.length); }, 5500);
+      }
+    }, {passive:true});
+  }
+  var ccPrev = document.getElementById('ccPrev');
+  var ccNext = document.getElementById('ccNext');
+  if (ccPrev) ccPrev.addEventListener('click', function() { clearInterval(ccTimer); goTo(current - 1); ccTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+  if (ccNext) ccNext.addEventListener('click', function() { clearInterval(ccTimer); goTo(current + 1); ccTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+})();
+
 function toggleMobileDropdown(btn) {
   btn.parentElement.classList.toggle('open');
 }
