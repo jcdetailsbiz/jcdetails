@@ -788,6 +788,33 @@ p { color: var(--text-light); }
 .quote-submit { width: 100%; margin-top: 8px; padding: 16px; font-size: 1.05rem; cursor: pointer; border: none; }
 .quote-note { text-align: center; margin-top: 16px; font-size: 0.85rem; color: #666; }
 
+/* ===== INLINE QUOTE SECTION (service pages) ===== */
+.quote-inline-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.quote-inline-left .section__title { margin-bottom: 16px; }
+.quote-inline-trust {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.quote-inline-right {
+  background: #111;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+}
+@media (max-width: 900px) {
+  .quote-inline-wrap { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+  .quote-inline-right { padding: 24px 20px; }
+}
+
 /* ===== THANKS PAGE ===== */
 .thanks-section { padding: 100px 0 120px; text-align: center; }
 .thanks-icon { font-size: 3rem; margin-bottom: 24px; }

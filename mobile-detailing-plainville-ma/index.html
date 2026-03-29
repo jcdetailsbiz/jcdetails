@@ -255,14 +255,49 @@
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
+<!-- GET A QUOTE -->
+<section class="section section--alt" id="get-quote">
   <div class="container">
-    <h2>Book Mobile Detailing in Plainville, MA</h2>
-    <p>We come to you. Book online or call to schedule your detail today.</p>
-    <div class="hero-actions" style="justify-content: center;">
-      <a href="/quote/" class="btn btn--primary btn--lg">Book Online</a>
-      <a href="tel:5082697667" class="btn btn--outline btn--lg">Call (508) 269-7667</a>
+    <div class="quote-inline-wrap">
+      <div class="quote-inline-left">
+        <p class="section__label">Free Quote</p>
+        <h2 class="section__title">Book Mobile Detailing Today</h2>
+        <p style="color:var(--text-light);margin-bottom:24px;">We'll reach out within 24 hours to confirm your appointment. We come to your driveway — no drop-off needed.</p>
+        <div class="quote-inline-trust">
+          <div class="stars" aria-label="5 star rating" style="font-size:1.1rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <span style="color:var(--text-light);font-size:0.9rem;"><strong style="color:var(--white);">5.0</strong> &bull; 21 Google Reviews</span>
+        </div>
+        <p style="color:var(--text-light);font-size:0.9rem;">Prefer to call? <a href="tel:5082697667" style="color:var(--accent);">(508) 269-7667</a></p>
+      </div>
+      <div class="quote-inline-right">
+        <form id="mdQuoteForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="md_first">First Name</label>
+              <input type="text" id="md_first" name="First Name" placeholder="Jack" required />
+            </div>
+            <div class="form-group">
+              <label for="md_last">Last Name</label>
+              <input type="text" id="md_last" name="Last Name" placeholder="Smith" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="md_phone">Phone Number</label>
+            <input type="tel" id="md_phone" name="Phone" placeholder="(508) 555-0100" required />
+          </div>
+          <div class="form-group">
+            <label for="md_service">Service</label>
+            <select id="md_service" name="Service" required>
+              <option value="" disabled>Select a service…</option>
+              <option value="Mobile Detailing" selected>Mobile Detailing</option>
+              <option value="Feynlab Ceramic Coating">Feynlab Ceramic Coating</option>
+              <option value="Paint Correction">Paint Correction</option>
+              <option value="Maintenance Plan">Maintenance Plan</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn--primary quote-submit">Send My Request</button>
+        </form>
+      </div>
     </div>
   </div>
 </section>
@@ -325,6 +360,22 @@
 </footer>
 
 <script>
+document.getElementById('mdQuoteForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var btn = this.querySelector('button[type="submit"]');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  fetch('/api/quote', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      'First Name': document.getElementById('md_first').value.trim(),
+      'Last Name':  document.getElementById('md_last').value.trim(),
+      'Phone':      document.getElementById('md_phone').value.trim(),
+      'Service':    document.getElementById('md_service').value
+    })
+  }).then(function() { window.location.href = '/quote/thanks/'; })
+    .catch(function() { window.location.href = '/quote/thanks/'; });
+});
 // Our Work slideshow
 (function() {
   var slides = document.querySelectorAll('#mdWorkSlideshow .work-slide');
