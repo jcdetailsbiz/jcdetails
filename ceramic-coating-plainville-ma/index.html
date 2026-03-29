@@ -409,6 +409,25 @@
   </div>
 </section>
 
+<!-- GOOGLE REVIEWS -->
+<section class="section section--alt" id="reviews-section">
+  <div class="container">
+    <p class="section__label">Google Reviews</p>
+    <h2 class="section__title">What Our Customers Say</h2>
+    <p class="section__sub">Verified 5-star reviews from our Google Business Profile.</p>
+    <div class="reviews-slider-wrap">
+      <button class="slide-arrow slide-arrow--prev" id="reviewPrev" aria-label="Previous review">&#8249;</button>
+      <div id="reviews-grid" class="reviews-grid">
+        <div class="reviews-loading" id="reviews-loading">Loading reviews...</div>
+      </div>
+      <button class="slide-arrow slide-arrow--next" id="reviewNext" aria-label="Next review">&#8250;</button>
+    </div>
+    <div class="reviews-cta">
+      <a href="https://search.google.com/local/reviews?placeid=ChIJrVmyDmZSpY4RA_ZQy0-RkW0" class="btn btn--outline" target="_blank" rel="noopener">See All Google Reviews</a>
+    </div>
+  </div>
+</section>
+
 <!-- GET A QUOTE -->
 <section class="section" id="get-quote">
   <div class="container">
@@ -642,6 +661,96 @@ window.initMap = function() {
     strokeColor:'#4BA8DE', strokeOpacity:0.9, strokeWeight:2.5,
     fillColor:'#4BA8DE', fillOpacity:0.12, map:map
   });
+  // ── Google Reviews (24h cache) ──────────────────────────────────────────
+  var CACHE_KEY = 'jcd_reviews_v1';
+  var CACHE_TTL = 86400000;
+  function renderReviews(reviews) {
+    var grid = document.getElementById('reviews-grid');
+    if (!reviews || !reviews.length) { showFallback(); return; }
+    var fiveStar = reviews.filter(function(r){ return r.rating === 5; });
+    var toShow = (fiveStar.length >= 3 ? fiveStar : reviews).slice(0, 5);
+    function cardHTML(r) {
+      var initial = r.author_name ? r.author_name.charAt(0).toUpperCase() : '?';
+      var avatar = r.profile_photo_url
+        ? '<img src="' + r.profile_photo_url + '" alt="' + r.author_name + '" />'
+        : initial;
+      return '<div class="review-card-header">' +
+          '<div class="review-avatar">' + avatar + '</div>' +
+          '<div><div class="review-author">' + r.author_name + '</div><div class="review-date">' + (r.relative_time_description||'') + '</div></div>' +
+        '</div>' +
+        '<div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>' +
+        '<p class="review-text">' + r.text + '</p>';
+    }
+    var dotsHtml = '<div class="reviews-dots">';
+    toShow.forEach(function(_, i) {
+      dotsHtml += '<button class="reviews-dot' + (i===0?' active':'') + '" aria-label="Review '+(i+1)+'"></button>';
+    });
+    dotsHtml += '</div>';
+    grid.innerHTML = '<div class="review-card">' + cardHTML(toShow[0]) + '</div>' + dotsHtml;
+    var card = grid.querySelector('.review-card');
+    var dots = grid.querySelectorAll('.reviews-dot');
+    var cur = 0;
+    function goTo(n) {
+      n = ((n % toShow.length) + toShow.length) % toShow.length;
+      card.classList.add('fading');
+      setTimeout(function() {
+        card.innerHTML = cardHTML(toShow[n]);
+        card.classList.remove('fading');
+        dots[cur].classList.remove('active');
+        cur = n;
+        dots[cur].classList.add('active');
+      }, 250);
+    }
+    dots.forEach(function(dot, i) {
+      dot.addEventListener('click', function(){ clearInterval(timer); goTo(i); timer = setInterval(function(){ goTo(cur+1); }, 6000); });
+    });
+    var timer = setInterval(function(){ goTo(cur+1); }, 6000);
+    var reviewTouchX = 0;
+    card.addEventListener('touchstart', function(e){ reviewTouchX = e.changedTouches[0].clientX; }, {passive:true});
+    card.addEventListener('touchend', function(e){
+      var dx = e.changedTouches[0].clientX - reviewTouchX;
+      if (Math.abs(dx) > 50) { clearInterval(timer); goTo(dx < 0 ? cur+1 : cur-1); timer = setInterval(function(){ goTo(cur+1); }, 6000); }
+    }, {passive:true});
+    var reviewPrev = document.getElementById('reviewPrev');
+    var reviewNext = document.getElementById('reviewNext');
+    if (reviewPrev) reviewPrev.addEventListener('click', function(){ clearInterval(timer); goTo(cur-1); timer = setInterval(function(){ goTo(cur+1); }, 6000); });
+    if (reviewNext) reviewNext.addEventListener('click', function(){ clearInterval(timer); goTo(cur+1); timer = setInterval(function(){ goTo(cur+1); }, 6000); });
+  }
+  function showFallback() {
+    var loading = document.getElementById('reviews-loading');
+    if (loading) loading.innerHTML = '"Jack did an incredible job on my truck. The attention to detail is second to none. I wouldn\'t trust anyone else with my vehicles." <br><strong style="color:var(--accent)"> -  Google Reviewer &nbsp;&#9733;&#9733;&#9733;&#9733;&#9733;</strong>';
+  }
+  function tryLoadReviews() {
+    try {
+      var cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        var data = JSON.parse(cached);
+        if (Date.now() - data.ts < CACHE_TTL && data.reviews && data.reviews.length) {
+          renderReviews(data.reviews);
+          return;
+        }
+      }
+    } catch(e) {}
+    if (google.maps.places && google.maps.places.Place) {
+      var place = new google.maps.places.Place({id: 'ChIJrVmyDmZSpY4RA_ZQy0-RkW0'});
+      place.fetchFields({fields: ['reviews', 'rating', 'userRatingCount']}).then(function(result) {
+        var p = result.place || result;
+        if (!p || !p.reviews || !p.reviews.length) { showFallback(); return; }
+        var reviews = p.reviews.map(function(r) {
+          return {
+            author_name: r.authorAttribution ? r.authorAttribution.displayName : 'Google Reviewer',
+            profile_photo_url: r.authorAttribution ? r.authorAttribution.photoURI : null,
+            rating: r.rating,
+            text: r.text ? (r.text.text || r.text) : '',
+            relative_time_description: r.relativePublishTimeDescription
+          };
+        });
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify({reviews: reviews, ts: Date.now()})); } catch(e) {}
+        renderReviews(reviews);
+      }).catch(function() { showFallback(); });
+    } else { showFallback(); }
+  }
+  tryLoadReviews();
 };
 function toggleFAQ(el) {
   var item = el.parentElement;
@@ -657,6 +766,6 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZrc5tuj55jlXomw1OGNWTo7aHQQ08XBI&loading=async&callback=initMap"></script>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZrc5tuj55jlXomw1OGNWTo7aHQQ08XBI&libraries=places&loading=async&callback=initMap"></script>
 </body>
 </html>
