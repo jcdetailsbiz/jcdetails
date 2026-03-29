@@ -21,7 +21,7 @@
 
   <link rel="preconnect" href="https://maps.googleapis.com" />
   <link rel="preconnect" href="https://maps.gstatic.com" crossorigin />
-  <link rel="preload" as="image" href="/images/maintenance-hero.jpg" />
+  <link rel="preload" as="image" href="/images/maintenance-hero.jpg" fetchpriority="high" />
   <link rel="stylesheet" href="../css/styles.css" />
 </head>
 <body>
@@ -189,12 +189,12 @@
     <p class="section__sub">Every visit leaves your vehicle looking its best — inside and out.</p>
     <div class="work-slideshow" id="maintWorkSlideshow">
       <div class="work-slide active" style="background-image:url('/images/series.jpeg');"></div>
-      <div class="work-slide" style="background-image:url('/images/work-5.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/maint-work-6.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/work-2.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/maint-work-5.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/maint-work-1.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/maint-work-2.jpg');"></div>
+      <div class="work-slide" data-bg="url('/images/work-5.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/maint-work-6.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/work-2.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/maint-work-5.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/maint-work-1.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/maint-work-2.jpg')"></div>
       <button class="slide-arrow slide-arrow--prev" id="maintPrev" aria-label="Previous slide">&#8249;</button>
       <button class="slide-arrow slide-arrow--next" id="maintNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="maintWorkDots"></div>
@@ -323,6 +323,11 @@
   if (!slides.length || !dotsEl) return;
   var current = 0, touchStartX = 0;
   var dots = [];
+  function loadSlide(slide) {
+    if (!slide.style.backgroundImage && slide.dataset.bg) {
+      slide.style.backgroundImage = slide.dataset.bg;
+    }
+  }
   slides.forEach(function(_, i) {
     var d = document.createElement('button');
     d.className = 'work-slide-dot' + (i === 0 ? ' active' : '');
@@ -335,9 +340,12 @@
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
     current = (idx + slides.length) % slides.length;
+    loadSlide(slides[current]);
     slides[current].classList.add('active');
     dots[current].classList.add('active');
+    loadSlide(slides[(current + 1) % slides.length]);
   }
+  loadSlide(slides[1]);
   var workTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
   if (container) {
     container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});

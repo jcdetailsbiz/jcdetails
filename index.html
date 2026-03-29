@@ -21,7 +21,7 @@
 
   <link rel="preconnect" href="https://maps.googleapis.com" />
   <link rel="preconnect" href="https://maps.gstatic.com" crossorigin />
-  <link rel="preload" as="image" href="/images/hero/hero-1.jpg" />
+  <link rel="preload" as="image" href="/images/hero/hero-1.jpg" fetchpriority="high" />
   <link rel="stylesheet" href="css/styles.css" />
 
   <!-- LocalBusiness Schema -->
@@ -123,13 +123,13 @@
   <!-- Background slideshow -->
   <div class="hero-slideshow" aria-hidden="true">
     <div class="hero-slide active" style="background-image:url('/images/hero/hero-1.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('/images/hero/hero-8.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('/images/hero/hero-4.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('/images/hero/hero-6.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('/images/hero/hero-5.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('/images/hero/hero-7.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('/images/hero/hero-2.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('/images/hero/hero-3.jpg')"></div>
+    <div class="hero-slide" data-bg="url('/images/hero/hero-8.jpg')"></div>
+    <div class="hero-slide" data-bg="url('/images/hero/hero-4.jpg')"></div>
+    <div class="hero-slide" data-bg="url('/images/hero/hero-6.jpg')"></div>
+    <div class="hero-slide" data-bg="url('/images/hero/hero-5.jpg')"></div>
+    <div class="hero-slide" data-bg="url('/images/hero/hero-7.jpg')"></div>
+    <div class="hero-slide" data-bg="url('/images/hero/hero-2.jpg')"></div>
+    <div class="hero-slide" data-bg="url('/images/hero/hero-3.jpg')"></div>
   </div>
   <button class="slide-arrow slide-arrow--prev" id="heroPrev" aria-label="Previous slide">&#8249;</button>
   <button class="slide-arrow slide-arrow--next" id="heroNext" aria-label="Next slide">&#8250;</button>
@@ -225,9 +225,9 @@
     <h2 class="section__title">Results That Speak for Themselves</h2>
     <div class="work-slideshow" id="workSlideshow">
       <div class="work-slide active" style="background-image:url('/images/work-4.jpg')"></div>
-      <div class="work-slide" style="background-image:url('/images/work-1.jpg')"></div>
-      <div class="work-slide" style="background-image:url('/images/work-2.jpg')"></div>
-      <div class="work-slide" style="background-image:url('/images/work-5.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/work-1.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/work-2.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/work-5.jpg')"></div>
       <button class="slide-arrow slide-arrow--prev" id="workPrev" aria-label="Previous slide">&#8249;</button>
       <button class="slide-arrow slide-arrow--next" id="workNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="workDots"></div>
@@ -382,18 +382,19 @@ document.addEventListener('click', function(e) {
   var container = document.querySelector('.hero-slideshow');
   if (slides.length < 2) return;
   var current = 0, touchStartX = 0;
-  function preload(idx) {
-    var next = slides[(idx + 1) % slides.length];
-    var url = next.style.backgroundImage.replace(/url\(['"]?|['"]?\)/g, '');
-    if (url) { var img = new Image(); img.src = url; }
+  function loadSlide(slide) {
+    if (!slide.style.backgroundImage && slide.dataset.bg) {
+      slide.style.backgroundImage = slide.dataset.bg;
+    }
   }
   function goTo(idx) {
     slides[current].classList.remove('active');
     current = (idx + slides.length) % slides.length;
+    loadSlide(slides[current]);
     slides[current].classList.add('active');
-    preload(current);
+    loadSlide(slides[(current + 1) % slides.length]);
   }
-  preload(0);
+  loadSlide(slides[1]);
   var heroTimer = setInterval(function() { goTo(current + 1); }, 5500);
   if (container) {
     container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
@@ -420,6 +421,11 @@ document.addEventListener('click', function(e) {
   if (!slides.length || !dotsEl) return;
   var current = 0, touchStartX = 0;
   var dots = [];
+  function loadSlide(slide) {
+    if (!slide.style.backgroundImage && slide.dataset.bg) {
+      slide.style.backgroundImage = slide.dataset.bg;
+    }
+  }
   slides.forEach(function(_, i) {
     var d = document.createElement('button');
     d.className = 'work-slide-dot' + (i === 0 ? ' active' : '');
@@ -432,9 +438,12 @@ document.addEventListener('click', function(e) {
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
     current = (idx + slides.length) % slides.length;
+    loadSlide(slides[current]);
     slides[current].classList.add('active');
     dots[current].classList.add('active');
+    loadSlide(slides[(current + 1) % slides.length]);
   }
+  loadSlide(slides[1]);
   var workTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
   if (container) {
     container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});

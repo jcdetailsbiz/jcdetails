@@ -21,7 +21,7 @@
 
   <link rel="preconnect" href="https://maps.googleapis.com" />
   <link rel="preconnect" href="https://maps.gstatic.com" crossorigin />
-  <link rel="preload" as="image" href="/images/feynlab-coating.jpg" />
+  <link rel="preload" as="image" href="/images/feynlab-coating.jpg" fetchpriority="high" />
   <link rel="stylesheet" href="../css/styles.css" />
 
   <!-- FAQPage Schema -->
@@ -267,9 +267,9 @@
     <p class="section__sub">Every vehicle we coat leaves with a finish that protects and turns heads.</p>
     <div class="work-slideshow" id="ccWorkSlideshow">
       <div class="work-slide active" style="background-image:url('/images/series.jpeg');"></div>
-      <div class="work-slide" style="background-image:url('/images/work-5.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/cc-detail-1.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/cc-detail-2.jpg');"></div>
+      <div class="work-slide" data-bg="url('/images/work-5.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/cc-detail-1.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/cc-detail-2.jpg')"></div>
       <button class="slide-arrow slide-arrow--prev" id="ccPrev" aria-label="Previous slide">&#8249;</button>
       <button class="slide-arrow slide-arrow--next" id="ccNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="ccWorkDots"></div>
@@ -479,6 +479,11 @@
   if (!slides.length || !dotsEl) return;
   var current = 0, touchStartX = 0;
   var dots = [];
+  function loadSlide(slide) {
+    if (!slide.style.backgroundImage && slide.dataset.bg) {
+      slide.style.backgroundImage = slide.dataset.bg;
+    }
+  }
   slides.forEach(function(_, i) {
     var d = document.createElement('button');
     d.className = 'work-slide-dot' + (i === 0 ? ' active' : '');
@@ -491,9 +496,12 @@
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
     current = (idx + slides.length) % slides.length;
+    loadSlide(slides[current]);
     slides[current].classList.add('active');
     dots[current].classList.add('active');
+    loadSlide(slides[(current + 1) % slides.length]);
   }
+  loadSlide(slides[1]);
   var ccTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
   if (container) {
     container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});

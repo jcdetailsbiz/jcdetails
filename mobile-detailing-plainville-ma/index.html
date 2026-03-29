@@ -21,7 +21,7 @@
 
   <link rel="preconnect" href="https://maps.googleapis.com" />
   <link rel="preconnect" href="https://maps.gstatic.com" crossorigin />
-  <link rel="preload" as="image" href="/images/mobile-detail-interior.jpg" />
+  <link rel="preload" as="image" href="/images/mobile-detail-interior.jpg" fetchpriority="high" />
   <link rel="stylesheet" href="../css/styles.css" />
 </head>
 <body>
@@ -205,11 +205,11 @@
     <p class="section__sub">Professional mobile detailing delivered to your driveway — inside and out.</p>
     <div class="work-slideshow" id="mdWorkSlideshow">
       <div class="work-slide active" style="background-image:url('/images/detail-work-2529.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/detail-work-2388.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/detail-work-1618.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/detail-work-4687.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/detail-work-1916.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/detail-work-2749.jpg');"></div>
+      <div class="work-slide" data-bg="url('/images/detail-work-2388.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/detail-work-1618.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/detail-work-4687.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/detail-work-1916.jpg')"></div>
+      <div class="work-slide" data-bg="url('/images/detail-work-2749.jpg')"></div>
       <button class="slide-arrow slide-arrow--prev" id="mdPrev" aria-label="Previous slide">&#8249;</button>
       <button class="slide-arrow slide-arrow--next" id="mdNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="mdWorkDots"></div>
@@ -333,6 +333,11 @@
   if (!slides.length || !dotsEl) return;
   var current = 0, touchStartX = 0;
   var dots = [];
+  function loadSlide(slide) {
+    if (!slide.style.backgroundImage && slide.dataset.bg) {
+      slide.style.backgroundImage = slide.dataset.bg;
+    }
+  }
   slides.forEach(function(_, i) {
     var d = document.createElement('button');
     d.className = 'work-slide-dot' + (i === 0 ? ' active' : '');
@@ -345,9 +350,12 @@
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
     current = (idx + slides.length) % slides.length;
+    loadSlide(slides[current]);
     slides[current].classList.add('active');
     dots[current].classList.add('active');
+    loadSlide(slides[(current + 1) % slides.length]);
   }
+  loadSlide(slides[1]);
   var mdTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
   if (container) {
     container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
