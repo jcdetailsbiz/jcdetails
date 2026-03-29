@@ -192,8 +192,8 @@
       <div class="work-slide" style="background-image:url('/images/work-5.jpg');"></div>
       <div class="work-slide" style="background-image:url('/images/maint-work-1.jpg');"></div>
       <div class="work-slide" style="background-image:url('/images/maint-work-2.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/maint-work-3.jpg');"></div>
-      <div class="work-slide" style="background-image:url('/images/maint-work-4.jpg');"></div>
+      <button class="slide-arrow slide-arrow--prev" id="maintPrev" aria-label="Previous slide">&#8249;</button>
+      <button class="slide-arrow slide-arrow--next" id="maintNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="maintWorkDots"></div>
     </div>
   </div>
@@ -347,6 +347,10 @@
       }
     }, {passive:true});
   }
+  var maintPrev = document.getElementById('maintPrev');
+  var maintNext = document.getElementById('maintNext');
+  if (maintPrev) maintPrev.addEventListener('click', function() { clearInterval(workTimer); goTo(current - 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+  if (maintNext) maintNext.addEventListener('click', function() { clearInterval(workTimer); goTo(current + 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
 })();
 
 function toggleMobileDropdown(btn) {

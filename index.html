@@ -131,6 +131,8 @@
     <div class="hero-slide" style="background-image:url('/images/hero/hero-2.jpg')"></div>
     <div class="hero-slide" style="background-image:url('/images/hero/hero-3.jpg')"></div>
   </div>
+  <button class="slide-arrow slide-arrow--prev" id="heroPrev" aria-label="Previous slide">&#8249;</button>
+  <button class="slide-arrow slide-arrow--next" id="heroNext" aria-label="Next slide">&#8250;</button>
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="hero-inner">
     <div>
@@ -172,8 +174,12 @@
     <p class="section__label">Google Reviews</p>
     <h2 class="section__title">What Our Customers Say</h2>
     <p class="section__sub">Verified 5-star reviews from our Google Business Profile.</p>
-    <div id="reviews-grid" class="reviews-grid">
-      <div class="reviews-loading" id="reviews-loading">Loading reviews...</div>
+    <div class="reviews-slider-wrap">
+      <button class="slide-arrow slide-arrow--prev" id="reviewPrev" aria-label="Previous review">&#8249;</button>
+      <div id="reviews-grid" class="reviews-grid">
+        <div class="reviews-loading" id="reviews-loading">Loading reviews...</div>
+      </div>
+      <button class="slide-arrow slide-arrow--next" id="reviewNext" aria-label="Next review">&#8250;</button>
     </div>
     <div class="reviews-cta">
       <a href="https://search.google.com/local/reviews?placeid=ChIJrVmyDmZSpY4RA_ZQy0-RkW0" class="btn btn--outline" target="_blank" rel="noopener">See All Google Reviews</a>
@@ -223,6 +229,8 @@
       <div class="work-slide" style="background-image:url('/images/work-2.jpg')"></div>
       <div class="work-slide" style="background-image:url('/images/work-3.jpg')"></div>
       <div class="work-slide" style="background-image:url('/images/work-5.jpg')"></div>
+      <button class="slide-arrow slide-arrow--prev" id="workPrev" aria-label="Previous slide">&#8249;</button>
+      <button class="slide-arrow slide-arrow--next" id="workNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="workDots"></div>
     </div>
   </div>
@@ -399,6 +407,10 @@ document.addEventListener('click', function(e) {
       }
     }, {passive:true});
   }
+  var heroPrev = document.getElementById('heroPrev');
+  var heroNext = document.getElementById('heroNext');
+  if (heroPrev) heroPrev.addEventListener('click', function() { clearInterval(heroTimer); goTo(current - 1); heroTimer = setInterval(function() { goTo(current + 1); }, 5500); });
+  if (heroNext) heroNext.addEventListener('click', function() { clearInterval(heroTimer); goTo(current + 1); heroTimer = setInterval(function() { goTo(current + 1); }, 5500); });
 })();
 
 // Work slideshow
@@ -436,6 +448,10 @@ document.addEventListener('click', function(e) {
       }
     }, {passive:true});
   }
+  var workPrev = document.getElementById('workPrev');
+  var workNext = document.getElementById('workNext');
+  if (workPrev) workPrev.addEventListener('click', function() { clearInterval(workTimer); goTo(current - 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+  if (workNext) workNext.addEventListener('click', function() { clearInterval(workTimer); goTo(current + 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
 })();
 
 // ── Google Maps + Reviews ──────────────────────────────────────────────────
@@ -580,6 +596,10 @@ window.initMapsAndReviews = function() {
       var dx = e.changedTouches[0].clientX - reviewTouchX;
       if (Math.abs(dx) > 50) { clearInterval(timer); goTo(dx < 0 ? cur+1 : cur-1); timer = setInterval(function(){ goTo(cur+1); }, 6000); }
     }, {passive:true});
+    var reviewPrev = document.getElementById('reviewPrev');
+    var reviewNext = document.getElementById('reviewNext');
+    if (reviewPrev) reviewPrev.addEventListener('click', function(){ clearInterval(timer); goTo(cur-1); timer = setInterval(function(){ goTo(cur+1); }, 6000); });
+    if (reviewNext) reviewNext.addEventListener('click', function(){ clearInterval(timer); goTo(cur+1); timer = setInterval(function(){ goTo(cur+1); }, 6000); });
   }
 
   function showFallback() {

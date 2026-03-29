@@ -692,6 +692,31 @@ p { color: var(--text-light); }
   transition: background 0.3s;
 }
 .work-slide-dot.active { background: #fff; }
+/* Slideshow nav arrows */
+.slide-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.slide-arrow:hover { background: rgba(75,168,222,0.6); border-color: rgba(75,168,222,0.8); }
+.slide-arrow--prev { left: 12px; }
+.slide-arrow--next { right: 12px; }
+.reviews-slider-wrap { position: relative; }
 @media (max-width: 768px) { .work-slideshow { height: 520px; } }
 @media (max-width: 480px) { .work-slideshow { height: 380px; } }
 .cc-gallery-section { padding: 52px 0 64px; background: var(--navy-mid); overflow: hidden; }
