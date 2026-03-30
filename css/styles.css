@@ -824,6 +824,28 @@ p { color: var(--text-light); }
   letter-spacing: 0.01em;
 }
 
+/* ===== MOBILE ONLY ===== */
+.mobile-cta-break { display: none; }
+@media (max-width: 768px) {
+  .mobile-cta-break { display: block; text-align: center; padding: 32px 0 8px; }
+  .mobile-cta-break p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; }
+}
+
+/* ===== PRICING WARRANTY BADGE ===== */
+.pricing-warranty {
+  display: inline-block;
+  background: rgba(75,168,222,0.12);
+  border: 1px solid rgba(75,168,222,0.3);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-top: 6px;
+}
+
 /* ===== THANKS PAGE ===== */
 .thanks-section { padding: 100px 0 120px; text-align: center; }
 .thanks-icon { font-size: 3rem; margin-bottom: 24px; }
