@@ -510,28 +510,6 @@ window.initMapsAndReviews = function() {
     {name:'Easton',      lat:42.0376, lng:-71.1084}
   ];
 
-  towns.forEach(function(town) {
-    var marker = new google.maps.Marker({
-      position: {lat: town.lat, lng: town.lng},
-      map: map,
-      title: town.name,
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: town.home ? 10 : 7,
-        fillColor: town.home ? '#4BA8DE' : '#4BA8DE',
-        fillOpacity: town.home ? 1 : 0.75,
-        strokeColor: '#ffffff',
-        strokeWeight: town.home ? 2.5 : 1.5
-      }
-    });
-
-    var infoWindow = new google.maps.InfoWindow({
-      content: '<div style="background:#141414;color:#fff;padding:8px 12px;border-radius:6px;font-size:0.82rem;font-family:system-ui,sans-serif;">' +
-               (town.home ? '<strong style="color:#4BA8DE">&#10003; Home Base</strong><br>' : '') +
-               '<strong>' + town.name + '</strong><br>Mobile detailing available</div>'
-    });
-
-    marker.addListener('click', function() { infoWindow.open(map, marker); });
   });
 
   // Approximate service-area polygon

@@ -484,20 +484,6 @@ window.initMap = function() {
     {name:'Sharon',      lat:42.1237, lng:-71.1779},
     {name:'Easton',      lat:42.0376, lng:-71.1084}
   ];
-  towns.forEach(function(town) {
-    var marker = new google.maps.Marker({
-      position:{lat:town.lat,lng:town.lng}, map:map, title:town.name,
-      icon:{path:google.maps.SymbolPath.CIRCLE, scale:town.home?10:7,
-        fillColor:'#4BA8DE', fillOpacity:town.home?1:0.75,
-        strokeColor:'#ffffff', strokeWeight:town.home?2.5:1.5}
-    });
-    var iw = new google.maps.InfoWindow({
-      content:'<div style="background:#141414;color:#fff;padding:8px 12px;border-radius:6px;font-size:0.82rem;font-family:system-ui,sans-serif;">' +
-        (town.home?'<strong style="color:#4BA8DE">&#10003; Home Base</strong><br>':'') +
-        '<strong>'+town.name+'</strong><br>Mobile detailing available</div>'
-    });
-    marker.addListener('click', function(){ iw.open(map, marker); });
-  });
   new google.maps.Polygon({
     paths:[{lat:41.9448,lng:-71.3437},{lat:42.0774,lng:-71.534},{lat:42.1801,lng:-71.4472},{lat:42.2131,lng:-71.3975},{lat:42.2454,lng:-71.3068},{lat:42.1309,lng:-71.1183},{lat:42.0176,lng:-71.0518}],
     strokeColor:'#4BA8DE', strokeOpacity:0.9, strokeWeight:2.5,
