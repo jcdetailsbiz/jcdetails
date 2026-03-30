@@ -203,6 +203,8 @@
       <div class="work-slide" data-bg="url('/images/maint-work-2.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/work-5.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/maint-work-5.jpg')"></div>
+      <button class="slide-arrow slide-arrow--prev" id="maintWorkPrev" aria-label="Previous slide">&#8249;</button>
+      <button class="slide-arrow slide-arrow--next" id="maintWorkNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="maintWorkDots"></div>
     </div>
   </div>
@@ -409,6 +411,16 @@
   }
   loadSlide(slides[1]);
   var workTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
+  var maintWorkPrevEl = document.getElementById('maintWorkPrev');
+  var maintWorkNextEl = document.getElementById('maintWorkNext');
+  if (maintWorkPrevEl) maintWorkPrevEl.addEventListener('click', function() { clearInterval(workTimer); goTo(current - 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+  if (maintWorkNextEl) maintWorkNextEl.addEventListener('click', function() { clearInterval(workTimer); goTo(current + 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+  var wTouchX = 0;
+  container.addEventListener('touchstart', function(e) { wTouchX = e.changedTouches[0].clientX; }, {passive:true});
+  container.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - wTouchX;
+    if (Math.abs(dx) > 50) { clearInterval(workTimer); goTo(dx < 0 ? current + 1 : current - 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); }
+  }, {passive:true});
 })();
 
 document.getElementById('maintQuoteForm').addEventListener('submit', function(e) {

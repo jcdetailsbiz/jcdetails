@@ -216,6 +216,8 @@
       <div class="work-slide" data-bg="url('/images/pc-work-5.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/pc-work-1.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/pc-work-3.jpg')"></div>
+      <button class="slide-arrow slide-arrow--prev" id="pcWorkPrev" aria-label="Previous slide">&#8249;</button>
+      <button class="slide-arrow slide-arrow--next" id="pcWorkNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="pcWorkDots"></div>
     </div>
   </div>
@@ -465,6 +467,16 @@ document.getElementById('pcQuoteForm').addEventListener('submit', function(e) {
   }
   loadSlide(slides[1]);
   var pcTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
+  var pcWorkPrevEl = document.getElementById('pcWorkPrev');
+  var pcWorkNextEl = document.getElementById('pcWorkNext');
+  if (pcWorkPrevEl) pcWorkPrevEl.addEventListener('click', function() { clearInterval(pcTimer); goTo(current - 1); pcTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+  if (pcWorkNextEl) pcWorkNextEl.addEventListener('click', function() { clearInterval(pcTimer); goTo(current + 1); pcTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
+  var wTouchX = 0;
+  container.addEventListener('touchstart', function(e) { wTouchX = e.changedTouches[0].clientX; }, {passive:true});
+  container.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - wTouchX;
+    if (Math.abs(dx) > 50) { clearInterval(pcTimer); goTo(dx < 0 ? current + 1 : current - 1); pcTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); }
+  }, {passive:true});
 })();
 
 function toggleMobileDropdown(btn) {
