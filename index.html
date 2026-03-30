@@ -8,7 +8,7 @@
   <!-- End Meta Pixel Code -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JC Details LLC | Mobile Detailing & Ceramic Coating in Plainville, MA</title>
-  <meta name="description" content="JC Details LLC is Plainville, MA's only Feynlab-certified mobile ceramic coating installer. 5-star rated mobile detailing, paint correction & ceramic coatings serving Plainville, Medway, Millis, Medfield, Walpole, Sharon & Easton MA." />
+  <meta name="description" content="JC Details LLC is Plainville, MA's only Feynlab-certified mobile ceramic coating installer. 5-star rated mobile detailing, paint correction & ceramic coatings serving Plainville, Bellingham, Medway, Millis, Medfield, Walpole, Sharon & Easton MA." />
   <link rel="canonical" href="https://jcdetails.com/" />
   <link rel="icon" type="image/jpeg" href="/images/logo.jpeg" />
   <link rel="apple-touch-icon" href="/images/logo.jpeg" />
@@ -54,6 +54,7 @@
     },
     "areaServed": [
       {"@type": "City", "name": "Plainville", "addressRegion": "MA"},
+      {"@type": "City", "name": "Bellingham", "addressRegion": "MA"},
       {"@type": "City", "name": "Medway", "addressRegion": "MA"},
       {"@type": "City", "name": "Millis", "addressRegion": "MA"},
       {"@type": "City", "name": "Medfield", "addressRegion": "MA"},
@@ -330,6 +331,7 @@
         <h4>Service Areas</h4>
         <ul>
           <li><a href="/service-areas/">Plainville, MA</a></li>
+          <li><a href="/service-areas/">Bellingham, MA</a></li>
           <li><a href="/service-areas/">Medway, MA</a></li>
           <li><a href="/service-areas/">Millis, MA</a></li>
           <li><a href="/service-areas/">Medfield, MA</a></li>
@@ -498,13 +500,14 @@ window.initMapsAndReviews = function() {
 
   // Service area towns
   var towns = [
-    {name:'Plainville', lat:42.0034, lng:-71.3306, home:true},
-    {name:'Medway',     lat:42.1526, lng:-71.3939},
-    {name:'Millis',     lat:42.1676, lng:-71.3584},
-    {name:'Medfield',   lat:42.1854, lng:-71.3070},
-    {name:'Walpole',    lat:42.1431, lng:-71.2496},
-    {name:'Sharon',     lat:42.1237, lng:-71.1779},
-    {name:'Easton',     lat:42.0376, lng:-71.1084}
+    {name:'Plainville',  lat:42.0034, lng:-71.3306, home:true},
+    {name:'Bellingham',  lat:42.0854, lng:-71.4745},
+    {name:'Medway',      lat:42.1526, lng:-71.3939},
+    {name:'Millis',      lat:42.1676, lng:-71.3584},
+    {name:'Medfield',    lat:42.1854, lng:-71.3070},
+    {name:'Walpole',     lat:42.1431, lng:-71.2496},
+    {name:'Sharon',      lat:42.1237, lng:-71.1779},
+    {name:'Easton',      lat:42.0376, lng:-71.1084}
   ];
 
   towns.forEach(function(town) {
@@ -533,12 +536,13 @@ window.initMapsAndReviews = function() {
 
   // Approximate service-area polygon
   var boundary = [
-    {lat:41.9492, lng:-71.3563},
-    {lat:42.1728, lng:-71.4504},
-    {lat:42.2022, lng:-71.4074},
-    {lat:42.2416, lng:-71.3281},
-    {lat:42.1307, lng:-71.1183},
-    {lat:42.0137, lng:-71.0534}
+    {lat:41.9448, lng:-71.3437},
+    {lat:42.0774, lng:-71.534},
+    {lat:42.1801, lng:-71.4472},
+    {lat:42.2131, lng:-71.3975},
+    {lat:42.2454, lng:-71.3068},
+    {lat:42.1309, lng:-71.1183},
+    {lat:42.0176, lng:-71.0518}
   ];
   new google.maps.Polygon({
     paths: boundary,

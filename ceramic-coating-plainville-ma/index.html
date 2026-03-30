@@ -63,7 +63,7 @@
         "name": "Is JC Details mobile for ceramic coating?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. JC Details is 100% mobile. We bring all equipment to your driveway or preferred location in Plainville, MA and surrounding towns including Medway, Millis, Medfield, Walpole, Sharon, and Easton."
+          "text": "Yes. JC Details is 100% mobile. We bring all equipment to your driveway or preferred location in Plainville, MA and surrounding towns including Bellingham, Medway, Millis, Medfield, Walpole, Sharon, and Easton."
         }
       },
       {
@@ -79,7 +79,7 @@
         "name": "What areas does JC Details serve?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "JC Details serves Plainville, Medway, Millis, Medfield, Walpole, Sharon, and Easton in Massachusetts."
+          "text": "JC Details serves Plainville, Bellingham, Medway, Millis, Medfield, Walpole, Sharon, and Easton in Massachusetts."
         }
       }
     ]
@@ -444,7 +444,7 @@
           <span class="faq-icon">+</span>
         </div>
         <div class="faq-answer">
-          Yes. JC Details is 100% mobile. We bring all our professional equipment to your driveway or preferred location throughout Plainville, MA and surrounding towns including Medway, Millis, Medfield, Walpole, Sharon, and Easton.
+          Yes. JC Details is 100% mobile. We bring all our professional equipment to your driveway or preferred location throughout Plainville, MA and surrounding towns including Bellingham, Medway, Millis, Medfield, Walpole, Sharon, and Easton.
         </div>
       </div>
 
@@ -506,6 +506,7 @@
         <h4>Service Areas</h4>
         <ul>
           <li><a href="/service-areas/">Plainville, MA</a></li>
+          <li><a href="/service-areas/">Bellingham, MA</a></li>
           <li><a href="/service-areas/">Medway, MA</a></li>
           <li><a href="/service-areas/">Millis, MA</a></li>
           <li><a href="/service-areas/">Medfield, MA</a></li>
@@ -636,13 +637,14 @@ window.initMap = function() {
     gestureHandling:'cooperative'
   });
   var towns = [
-    {name:'Plainville', lat:42.0034, lng:-71.3306, home:true},
-    {name:'Medway',     lat:42.1526, lng:-71.3939},
-    {name:'Millis',     lat:42.1676, lng:-71.3584},
-    {name:'Medfield',   lat:42.1854, lng:-71.3070},
-    {name:'Walpole',    lat:42.1431, lng:-71.2496},
-    {name:'Sharon',     lat:42.1237, lng:-71.1779},
-    {name:'Easton',     lat:42.0376, lng:-71.1084}
+    {name:'Plainville',  lat:42.0034, lng:-71.3306, home:true},
+    {name:'Bellingham',  lat:42.0854, lng:-71.4745},
+    {name:'Medway',      lat:42.1526, lng:-71.3939},
+    {name:'Millis',      lat:42.1676, lng:-71.3584},
+    {name:'Medfield',    lat:42.1854, lng:-71.3070},
+    {name:'Walpole',     lat:42.1431, lng:-71.2496},
+    {name:'Sharon',      lat:42.1237, lng:-71.1779},
+    {name:'Easton',      lat:42.0376, lng:-71.1084}
   ];
   towns.forEach(function(town) {
     var marker = new google.maps.Marker({
@@ -659,7 +661,7 @@ window.initMap = function() {
     marker.addListener('click', function(){ iw.open(map, marker); });
   });
   new google.maps.Polygon({
-    paths:[{lat:41.9492,lng:-71.3563},{lat:42.1728,lng:-71.4504},{lat:42.2022,lng:-71.4074},{lat:42.2416,lng:-71.3281},{lat:42.1307,lng:-71.1183},{lat:42.0137,lng:-71.0534}],
+    paths:[{lat:41.9448,lng:-71.3437},{lat:42.0774,lng:-71.534},{lat:42.1801,lng:-71.4472},{lat:42.2131,lng:-71.3975},{lat:42.2454,lng:-71.3068},{lat:42.1309,lng:-71.1183},{lat:42.0176,lng:-71.0518}],
     strokeColor:'#4BA8DE', strokeOpacity:0.9, strokeWeight:2.5,
     fillColor:'#4BA8DE', fillOpacity:0.12, map:map
   });
