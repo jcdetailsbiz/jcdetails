@@ -720,7 +720,7 @@ window.initMap = function() {
       renderReviews(cached.reviews);
     }
     // Re-fetch from Google if cache is stale (>1h) or missing
-    if (age > 3600000 || !cached || !cached.reviews || !cached.reviews.length) {
+    if (age > 900000 || !cached || !cached.reviews || !cached.reviews.length) {
       if (google.maps.places && google.maps.places.Place) {
         var place = new google.maps.places.Place({id: 'ChIJrVmyDmZSpY4RA_ZQy0-RkW0'});
         place.fetchFields({fields: ['reviews', 'rating', 'userRatingCount']}).then(function(result) {
