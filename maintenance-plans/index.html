@@ -85,7 +85,7 @@
     </div>
     <div class="hero-trust">
       <div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-      <p class="trust-text"><strong>5.0 Stars</strong>  -  21 Google Reviews</p>
+      <p class="trust-text"><strong>5.0 Stars</strong>  -  <span class="jcd-rc">21</span> Google Reviews</p>
     </div>
   </div>
 </section>
@@ -281,7 +281,7 @@
         <p style="color:var(--text-light);margin-bottom:24px;">We'll reach out within 24 hours to discuss your request. We'll gather details about your vehicle and exact service to determine final pricing. No drop offs - we come to your driveway.</p>
         <div class="quote-inline-trust">
           <div class="stars" aria-label="5 star rating" style="font-size:1.1rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <span style="color:var(--text-light);font-size:0.9rem;"><strong style="color:var(--white);">5.0</strong> &bull; 21 Google Reviews</span>
+          <span style="color:var(--text-light);font-size:0.9rem;"><strong style="color:var(--white);">5.0</strong> &bull; <span class="jcd-rc">21</span> Google Reviews</span>
         </div>
         <p style="color:var(--text-light);font-size:0.9rem;">Prefer to call? <a href="tel:5082697667" style="color:var(--accent);">(508) 269-7667</a></p>
       </div>
@@ -327,7 +327,7 @@
         <img src="/images/logo.jpeg" alt="JC Details LLC  -  Mobile Auto Detailing, Plainville MA" class="footer-logo-img" loading="lazy" decoding="async" />
         <p>Plainville's only Feynlab-certified mobile ceramic coating installer. We bring professional auto detailing to your driveway.</p>
         <div class="stars" aria-label="5 star rating" style="font-size:1rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p style="margin-top:4px; font-size:0.85rem;">5.0 &bull; 21 Google Reviews</p>
+        <p style="margin-top:4px; font-size:0.85rem;">5.0 &bull; <span class="jcd-rc">21</span> Google Reviews</p>
       </div>
       <div class="footer-col">
         <h4>Services</h4>
@@ -589,7 +589,7 @@ window.initMap = function() {
             relative_time_description: r.relativePublishTimeDescription
           };
         });
-        try { localStorage.setItem(CACHE_KEY, JSON.stringify({reviews: reviews, ts: Date.now()})); } catch(e) {}
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify({reviews: reviews, count: (p.userRatingCount||0), rating: (p.rating||5), ts: Date.now()})); } catch(e) {}
         renderReviews(reviews);
       }).catch(function() { showFallback(); });
     } else { showFallback(); }
@@ -598,5 +598,6 @@ window.initMap = function() {
 };
 </script>
 <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZrc5tuj55jlXomw1OGNWTo7aHQQ08XBI&libraries=places&loading=async&callback=initMap"></script>
+<script src="/js/review-count.js"></script>
 </body>
 </html>

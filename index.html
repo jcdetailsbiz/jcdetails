@@ -32,7 +32,7 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": ["LocalBusiness", "AutoDetailing", "CeramicCoating", "MobileDetailing"],
     "name": "JC Details LLC",
     "description": "Plainville MA's only Feynlab-certified mobile ceramic coating installer. Offering mobile detailing, paint correction, and ceramic coatings throughout MetroWest and Providence area.",
     "telephone": "(508) 269-7667",
@@ -149,7 +149,7 @@
       </div>
       <div class="hero-trust">
         <div class="stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="trust-text"><strong>5.0 Stars</strong>  -  21 Google Reviews</p>
+        <p class="trust-text"><strong>5.0 Stars</strong>  -  <span class="jcd-rc">21</span> Google Reviews</p>
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
@@ -318,7 +318,7 @@
         <img src="/images/logo.jpeg" alt="JC Details LLC  -  Mobile Auto Detailing, Plainville MA" class="footer-logo-img" loading="lazy" decoding="async" />
         <p>Plainville's only Feynlab-certified mobile ceramic coating installer. We bring professional auto detailing to your driveway.</p>
         <div class="stars" aria-label="5 star rating" style="font-size:1rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p style="margin-top:4px; font-size:0.85rem;">5.0 &bull; 21 Google Reviews</p>
+        <p style="margin-top:4px; font-size:0.85rem;">5.0 &bull; <span class="jcd-rc">21</span> Google Reviews</p>
       </div>
       <div class="footer-col">
         <h4>Services</h4>
@@ -647,7 +647,7 @@ window.initMapsAndReviews = function() {
             relative_time_description: r.relativePublishTimeDescription
           };
         });
-        try { localStorage.setItem(CACHE_KEY, JSON.stringify({reviews: reviews, ts: Date.now()})); } catch(e) {}
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify({reviews: reviews, count: (p.userRatingCount||0), rating: (p.rating||5), ts: Date.now()})); } catch(e) {}
         renderReviews(reviews);
       }).catch(function() { showFallback(); });
     } else { showFallback(); }
@@ -657,5 +657,6 @@ window.initMapsAndReviews = function() {
 };
 </script>
 <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZrc5tuj55jlXomw1OGNWTo7aHQQ08XBI&libraries=places&loading=async&callback=initMapsAndReviews"></script>
+<script src="/js/review-count.js"></script>
 </body>
 </html>
