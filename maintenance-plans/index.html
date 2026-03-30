@@ -203,8 +203,6 @@
       <div class="work-slide" data-bg="url('/images/maint-work-2.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/work-5.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/maint-work-5.jpg')"></div>
-      <button class="slide-arrow slide-arrow--prev" id="maintPrev" aria-label="Previous slide">&#8249;</button>
-      <button class="slide-arrow slide-arrow--next" id="maintNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="maintWorkDots"></div>
     </div>
   </div>
@@ -411,21 +409,6 @@
   }
   loadSlide(slides[1]);
   var workTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
-  if (container) {
-    container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
-    container.addEventListener('touchend', function(e) {
-      var dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 50) {
-        clearInterval(workTimer);
-        goTo(dx < 0 ? current + 1 : current - 1);
-        workTimer = setInterval(function() { goTo((current+1)%slides.length); }, 5500);
-      }
-    }, {passive:true});
-  }
-  var maintPrev = document.getElementById('maintPrev');
-  var maintNext = document.getElementById('maintNext');
-  if (maintPrev) maintPrev.addEventListener('click', function() { clearInterval(workTimer); goTo(current - 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
-  if (maintNext) maintNext.addEventListener('click', function() { clearInterval(workTimer); goTo(current + 1); workTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
 })();
 
 document.getElementById('maintQuoteForm').addEventListener('submit', function(e) {

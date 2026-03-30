@@ -246,8 +246,6 @@
       <div class="work-slide" data-bg="url('/images/detail-work-4687.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/detail-work-1916.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/detail-work-2749.jpg')"></div>
-      <button class="slide-arrow slide-arrow--prev" id="mdPrev" aria-label="Previous slide">&#8249;</button>
-      <button class="slide-arrow slide-arrow--next" id="mdNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="mdWorkDots"></div>
     </div>
   </div>
@@ -439,21 +437,6 @@ document.getElementById('mdQuoteForm').addEventListener('submit', function(e) {
   }
   loadSlide(slides[1]);
   var mdTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
-  if (container) {
-    container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
-    container.addEventListener('touchend', function(e) {
-      var dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 50) {
-        clearInterval(mdTimer);
-        goTo(dx < 0 ? current + 1 : current - 1);
-        mdTimer = setInterval(function() { goTo((current+1)%slides.length); }, 5500);
-      }
-    }, {passive:true});
-  }
-  var mdPrev = document.getElementById('mdPrev');
-  var mdNext = document.getElementById('mdNext');
-  if (mdPrev) mdPrev.addEventListener('click', function() { clearInterval(mdTimer); goTo(current - 1); mdTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
-  if (mdNext) mdNext.addEventListener('click', function() { clearInterval(mdTimer); goTo(current + 1); mdTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
 })();
 
 function toggleMobileDropdown(btn) {

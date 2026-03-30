@@ -284,8 +284,6 @@
       <div class="work-slide" data-bg="url('/images/work-5.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/cc-detail-1.jpg')"></div>
       <div class="work-slide" data-bg="url('/images/cc-detail-2.jpg')"></div>
-      <button class="slide-arrow slide-arrow--prev" id="ccPrev" aria-label="Previous slide">&#8249;</button>
-      <button class="slide-arrow slide-arrow--next" id="ccNext" aria-label="Next slide">&#8250;</button>
       <div class="work-slide-dots" id="ccWorkDots"></div>
     </div>
   </div>
@@ -590,21 +588,6 @@ document.getElementById('ccQuoteForm').addEventListener('submit', function(e) {
   }
   loadSlide(slides[1]);
   var ccTimer = setInterval(function() { goTo((current + 1) % slides.length); }, 5500);
-  if (container) {
-    container.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
-    container.addEventListener('touchend', function(e) {
-      var dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 50) {
-        clearInterval(ccTimer);
-        goTo(dx < 0 ? current + 1 : current - 1);
-        ccTimer = setInterval(function() { goTo((current+1)%slides.length); }, 5500);
-      }
-    }, {passive:true});
-  }
-  var ccPrev = document.getElementById('ccPrev');
-  var ccNext = document.getElementById('ccNext');
-  if (ccPrev) ccPrev.addEventListener('click', function() { clearInterval(ccTimer); goTo(current - 1); ccTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
-  if (ccNext) ccNext.addEventListener('click', function() { clearInterval(ccTimer); goTo(current + 1); ccTimer = setInterval(function(){ goTo((current+1)%slides.length); }, 5500); });
 })();
 
 function toggleMobileDropdown(btn) {
