@@ -3,20 +3,17 @@
 // Last synced: 2026-03-30
 window.JCD_SERVICE_AREAS = {
   towns: [
-    {name:'Plainville',          lat:42.0034, lng:-71.3306, home:true},
-    {name:'North Attleborough',  lat:41.9787, lng:-71.3370},
-    {name:'Wrentham',            lat:42.0526, lng:-71.3481},
-    {name:'Mansfield',           lat:42.0334, lng:-71.2187},
-    {name:'Norton',              lat:41.9731, lng:-71.1865},
-    {name:'Franklin',            lat:42.0834, lng:-71.3970},
-    {name:'Foxborough',          lat:42.0654, lng:-71.2456},
-    {name:'Attleboro',           lat:41.9445, lng:-71.2862},
-    {name:'Cumberland, RI',      lat:41.9668, lng:-71.4026},
-    {name:'Lincoln, RI',         lat:41.9198, lng:-71.4484}
+    {name:'Plainville',  lat:42.0034, lng:-71.3306, home:true},
+    {name:'Medway',      lat:42.1526, lng:-71.3939},
+    {name:'Millis',      lat:42.1676, lng:-71.3584},
+    {name:'Medfield',    lat:42.1854, lng:-71.3070},
+    {name:'Walpole',     lat:42.1431, lng:-71.2496},
+    {name:'Sharon',      lat:42.1237, lng:-71.1779},
+    {name:'Easton',      lat:42.0376, lng:-71.1084}
   ],
   boundary: [
-    {lat:42.13,lng:-71.43},{lat:42.10,lng:-71.20},{lat:42.05,lng:-71.18},
-    {lat:41.96,lng:-71.17},{lat:41.91,lng:-71.37},{lat:41.93,lng:-71.50},
-    {lat:41.99,lng:-71.50},{lat:42.08,lng:-71.47}
+    {lat:41.9492,lng:-71.3563},{lat:42.1728,lng:-71.4504},
+    {lat:42.2022,lng:-71.4074},{lat:42.2416,lng:-71.3281},
+    {lat:42.1307,lng:-71.1183},{lat:42.0137,lng:-71.0534}
   ]
 };
