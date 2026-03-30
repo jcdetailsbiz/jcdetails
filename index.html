@@ -499,16 +499,6 @@ window.initMapsAndReviews = function() {
   });
 
   // Service area towns
-  var towns = [
-    {name:'Plainville',  lat:42.0034, lng:-71.3306, home:true},
-    {name:'Bellingham',  lat:42.0854, lng:-71.4745},
-    {name:'Medway',      lat:42.1526, lng:-71.3939},
-    {name:'Millis',      lat:42.1676, lng:-71.3584},
-    {name:'Medfield',    lat:42.1854, lng:-71.3070},
-    {name:'Walpole',     lat:42.1431, lng:-71.2496},
-    {name:'Sharon',      lat:42.1237, lng:-71.1779},
-    {name:'Easton',      lat:42.0376, lng:-71.1084}
-  ];
 
   // Approximate service-area polygon
   var boundary = [
@@ -532,7 +522,7 @@ window.initMapsAndReviews = function() {
 
   // ── Google Reviews (24h cache) ───────────────────────────────────────────
   var CACHE_KEY = 'jcd_reviews_v1';
-  var CACHE_TTL = 86400000; // 24 hours
+  var CACHE_TTL = 86400000;
 
   function renderReviews(reviews) {
     var grid = document.getElementById('reviews-grid');
@@ -599,38 +589,35 @@ window.initMapsAndReviews = function() {
   }
 
   function tryLoadReviews() {
+    var cached = null, age = Infinity;
     try {
-      var cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        var data = JSON.parse(cached);
-        if (Date.now() - data.ts < CACHE_TTL && data.reviews && data.reviews.length) {
-          renderReviews(data.reviews);
-          return;
-        }
-      }
+      var raw = localStorage.getItem(CACHE_KEY);
+      if (raw) { cached = JSON.parse(raw); age = Date.now() - cached.ts; }
     } catch(e) {}
-
-    // New Places API (google.maps.places.Place)  -  Place ID hardcoded
-    if (google.maps.places && google.maps.places.Place) {
-      var place = new google.maps.places.Place({id: 'ChIJrVmyDmZSpY4RA_ZQy0-RkW0'});
-      place.fetchFields({fields: ['reviews', 'rating', 'userRatingCount']}).then(function(result) {
-        var p = result.place || result;
-        if (!p || !p.reviews || !p.reviews.length) { showFallback(); return; }
-        var reviews = p.reviews.map(function(r) {
-          return {
-            author_name: r.authorAttribution ? r.authorAttribution.displayName : 'Google Reviewer',
-            profile_photo_url: r.authorAttribution ? r.authorAttribution.photoURI : null,
-            rating: r.rating,
-            text: r.text ? (r.text.text || r.text) : '',
-            relative_time_description: r.relativePublishTimeDescription
-          };
-        });
-        try { localStorage.setItem(CACHE_KEY, JSON.stringify({reviews: reviews, count: (p.userRatingCount||0), rating: (p.rating||5), ts: Date.now()})); } catch(e) {}
-        renderReviews(reviews);
-      }).catch(function() { showFallback(); });
-    } else { showFallback(); }
+    if (cached && cached.reviews && cached.reviews.length && age < CACHE_TTL) {
+      renderReviews(cached.reviews);
+    }
+    if (age > 900000 || !cached || !cached.reviews || !cached.reviews.length) {
+      if (google.maps.places && google.maps.places.Place) {
+        var place = new google.maps.places.Place({id: 'ChIJrVmyDmZSpY4RA_ZQy0-RkW0'});
+        place.fetchFields({fields: ['reviews', 'rating', 'userRatingCount']}).then(function(result) {
+          var p = result.place || result;
+          if (!p || !p.reviews || !p.reviews.length) { if (age >= CACHE_TTL) showFallback(); return; }
+          var reviews = p.reviews.map(function(r) {
+            return {
+              author_name: r.authorAttribution ? r.authorAttribution.displayName : 'Google Reviewer',
+              profile_photo_url: r.authorAttribution ? r.authorAttribution.photoURI : null,
+              rating: r.rating,
+              text: r.text ? (r.text.text || r.text) : '',
+              relative_time_description: r.relativePublishTimeDescription
+            };
+          });
+          try { localStorage.setItem(CACHE_KEY, JSON.stringify({reviews: reviews, count: (p.userRatingCount||0), rating: (p.rating||5), ts: Date.now()})); } catch(e) {}
+          renderReviews(reviews);
+        }).catch(function() { if (age >= CACHE_TTL) showFallback(); });
+      } else if (age >= CACHE_TTL) { showFallback(); }
+    }
   }
-
   tryLoadReviews();
 };
 </script>

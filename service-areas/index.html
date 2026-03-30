@@ -25,7 +25,7 @@
 
   <link rel="preconnect" href="https://maps.googleapis.com" />
   <link rel="preconnect" href="https://maps.gstatic.com" crossorigin />
-  <link rel="preload" as="image" href="/images/service-areas-hero.jpg" />
+  <link rel="preload" as="image" href="/images/service-areas-hero.jpg" fetchpriority="high" />
   <link rel="stylesheet" href="../css/styles.css" />
 </head>
 <body>
@@ -292,16 +292,6 @@ window.initMap = function() {
     zoomControlOptions:{position:google.maps.ControlPosition.RIGHT_BOTTOM},
     gestureHandling:'cooperative'
   });
-  var towns = [
-    {name:'Plainville',  lat:42.0034, lng:-71.3306, home:true},
-    {name:'Bellingham',  lat:42.0854, lng:-71.4745},
-    {name:'Medway',      lat:42.1526, lng:-71.3939},
-    {name:'Millis',      lat:42.1676, lng:-71.3584},
-    {name:'Medfield',    lat:42.1854, lng:-71.3070},
-    {name:'Walpole',     lat:42.1431, lng:-71.2496},
-    {name:'Sharon',      lat:42.1237, lng:-71.1779},
-    {name:'Easton',      lat:42.0376, lng:-71.1084}
-  ];
   new google.maps.Polygon({
     paths:[{lat:41.9448,lng:-71.3437},{lat:42.0774,lng:-71.534},{lat:42.1801,lng:-71.4472},{lat:42.2131,lng:-71.3975},{lat:42.2454,lng:-71.3068},{lat:42.1309,lng:-71.1183},{lat:42.0176,lng:-71.0518}],
     strokeColor:'#4BA8DE', strokeOpacity:0.9, strokeWeight:2.5,
