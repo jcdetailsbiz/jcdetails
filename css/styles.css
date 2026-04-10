@@ -293,7 +293,7 @@ p { color: var(--text-light); }
 }
 
 /* Ensure content sits above overlay */
-.hero-inner { position: relative; z-index: 2; }
+.hero-inner { position: relative; z-index: 2; text-shadow: 0 1px 8px rgba(0,0,0,0.85), 0 2px 24px rgba(0,0,0,0.6); }
 .hero-inner {
   max-width: 1140px;
   margin: 0 auto;
@@ -320,7 +320,7 @@ p { color: var(--text-light); }
 .hero h1 { margin-bottom: 20px; }
 .hero-sub {
   font-size: 1.1rem;
-  color: var(--text-light);
+  color: var(--white);
   margin-bottom: 36px;
   max-width: 540px;
 }
@@ -341,7 +341,7 @@ p { color: var(--text-light); }
   letter-spacing: 2px;
 }
 .trust-text {
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.8);
   font-size: 0.9rem;
 }
 .trust-text strong { color: var(--white); }
@@ -552,22 +552,23 @@ p { color: var(--text-light); }
 .page-hero--img .page-hero-inner {
   position: relative;
   z-index: 1;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.85), 0 2px 24px rgba(0,0,0,0.6);
 }
 .page-hero-inner { max-width: 1140px; margin: 0 auto; }
 .breadcrumb {
   font-size: 0.85rem;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.75);
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.breadcrumb a { color: var(--text-muted); }
+.breadcrumb a { color: rgba(255,255,255,0.75); }
 .breadcrumb a:hover { color: var(--white); }
 .page-hero h1 { margin-bottom: 16px; }
 .page-hero-sub {
   font-size: 1.1rem;
-  color: var(--text-light);
+  color: var(--white);
   max-width: 640px;
   margin-bottom: 32px;
 }
