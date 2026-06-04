@@ -598,32 +598,34 @@ function toggleMenu() {
 }
 window.initMap = function() {
   var mapEl = document.getElementById('service-map');
-  var mapStyles = [
-    {elementType:'geometry', stylers:[{color:'#0d0d0d'}]},
-    {elementType:'labels.text.fill', stylers:[{color:'#c0d4e4'}]},
-    {elementType:'labels.text.stroke', stylers:[{color:'#000000'}]},
-    {featureType:'administrative', elementType:'geometry.stroke', stylers:[{color:'#4BA8DE'},{weight:0.8}]},
-    {featureType:'administrative.locality', elementType:'labels.text.fill', stylers:[{color:'#ffffff'}]},
-    {featureType:'road', elementType:'geometry', stylers:[{color:'#1c1c1c'}]},
-    {featureType:'road.highway', elementType:'geometry', stylers:[{color:'#2a2a2a'}]},
-    {featureType:'road', elementType:'labels.text.fill', stylers:[{color:'#6a8a9e'}]},
-    {featureType:'water', elementType:'geometry', stylers:[{color:'#050d1a'}]},
-    {featureType:'water', elementType:'labels.text.fill', stylers:[{color:'#4BA8DE'}]},
-    {featureType:'poi', stylers:[{visibility:'off'}]},
-    {featureType:'transit', stylers:[{visibility:'off'}]},
-    {featureType:'landscape', elementType:'geometry', stylers:[{color:'#111111'}]}
-  ];
-  var map = new google.maps.Map(mapEl, {
-    center:{lat:42.01,lng:-71.33}, zoom:10, styles:mapStyles,
-    disableDefaultUI:true, zoomControl:true,
-    zoomControlOptions:{position:google.maps.ControlPosition.RIGHT_BOTTOM},
-    gestureHandling:'cooperative'
-  });
-  new google.maps.Polygon({
-    paths:[{lat:41.9448,lng:-71.3437},{lat:41.90,lng:-71.44},{lat:41.90,lng:-71.60},{lat:41.94,lng:-71.62},{lat:42.15,lng:-71.60},{lat:42.1801,lng:-71.4472},{lat:42.2131,lng:-71.3975},{lat:42.27,lng:-71.28},{lat:42.27,lng:-71.10},{lat:41.90,lng:-71.22}],
-    strokeColor:'#4BA8DE', strokeOpacity:0.9, strokeWeight:2.5,
-    fillColor:'#4BA8DE', fillOpacity:0.12, map:map
-  });
+  if (mapEl) {
+    var mapStyles = [
+      {elementType:'geometry', stylers:[{color:'#0d0d0d'}]},
+      {elementType:'labels.text.fill', stylers:[{color:'#c0d4e4'}]},
+      {elementType:'labels.text.stroke', stylers:[{color:'#000000'}]},
+      {featureType:'administrative', elementType:'geometry.stroke', stylers:[{color:'#4BA8DE'},{weight:0.8}]},
+      {featureType:'administrative.locality', elementType:'labels.text.fill', stylers:[{color:'#ffffff'}]},
+      {featureType:'road', elementType:'geometry', stylers:[{color:'#1c1c1c'}]},
+      {featureType:'road.highway', elementType:'geometry', stylers:[{color:'#2a2a2a'}]},
+      {featureType:'road', elementType:'labels.text.fill', stylers:[{color:'#6a8a9e'}]},
+      {featureType:'water', elementType:'geometry', stylers:[{color:'#050d1a'}]},
+      {featureType:'water', elementType:'labels.text.fill', stylers:[{color:'#4BA8DE'}]},
+      {featureType:'poi', stylers:[{visibility:'off'}]},
+      {featureType:'transit', stylers:[{visibility:'off'}]},
+      {featureType:'landscape', elementType:'geometry', stylers:[{color:'#111111'}]}
+    ];
+    var map = new google.maps.Map(mapEl, {
+      center:{lat:42.01,lng:-71.33}, zoom:10, styles:mapStyles,
+      disableDefaultUI:true, zoomControl:true,
+      zoomControlOptions:{position:google.maps.ControlPosition.RIGHT_BOTTOM},
+      gestureHandling:'cooperative'
+    });
+    new google.maps.Polygon({
+      paths:[{lat:41.9448,lng:-71.3437},{lat:41.90,lng:-71.44},{lat:41.90,lng:-71.60},{lat:41.94,lng:-71.62},{lat:42.15,lng:-71.60},{lat:42.1801,lng:-71.4472},{lat:42.2131,lng:-71.3975},{lat:42.27,lng:-71.28},{lat:42.27,lng:-71.10},{lat:41.90,lng:-71.22}],
+      strokeColor:'#4BA8DE', strokeOpacity:0.9, strokeWeight:2.5,
+      fillColor:'#4BA8DE', fillOpacity:0.12, map:map
+    });
+  }
   // ── Google Reviews (24h cache) ──────────────────────────────────────────
   var CACHE_KEY = 'jcd_reviews_v1';
   var CACHE_TTL = 21600000;
