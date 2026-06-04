@@ -438,8 +438,8 @@ p { color: var(--text-light); }
 /* ===== PRICING CARDS ===== */
 .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .pricing-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(74,156,212,0.1), rgba(74,156,212,0.03));
+  border: 1px solid var(--accent);
   border-radius: var(--radius-lg);
   padding: 36px 28px;
   display: flex;
@@ -450,19 +450,6 @@ p { color: var(--text-light); }
   background: linear-gradient(135deg, rgba(74,156,212,0.1), rgba(74,156,212,0.03));
   border-color: var(--accent);
   position: relative;
-}
-.pricing-card--featured::before {
-  content: 'Most Popular';
-  position: absolute;
-  top: -1px; left: 50%; transform: translateX(-50%);
-  background: var(--accent);
-  color: var(--white);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 4px 16px;
-  border-radius: 0 0 8px 8px;
 }
 .pricing-card:hover {
   transform: translateY(-4px);
